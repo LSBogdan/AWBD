@@ -1,0 +1,36 @@
+spring:
+  profiles:
+    active: dev
+  main:
+    allow-bean-definition-overriding: true
+    banner-mode: off
+  application:
+    name: ProjX
+  datasource:
+    url: jdbc:postgresql://localhost:5432/projx
+    driveClassName: org.postgresql.Driver
+    username: admin
+    password: admin
+  jpa:
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        show_sql: true
+        hbm2ddl:
+          auto: update
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+
+
+server:
+  port: 8085
+
+
+
+
+
+
+
