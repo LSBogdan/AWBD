@@ -93,23 +93,59 @@ public class SprintPeriodService {
         sprintPeriodJPARepository.delete(sprintPeriod.get());
     }
 
-    public String updateSprintPeriodInfo(String id, SprintPeriodInfo sprintPeriodInfo){
-        if(!StringUtils.hasText(id) || !StringUtils.hasText(sprintPeriodInfo.getId()) || !id.equals(sprintPeriodInfo.getId())){
-            logger.error("Id is null!");
-            throw new CustomErrorHandler(ExceptionEnum.INVALID_FIELD);
-        }
-        SprintPeriod sprintPeriod = sprintPeriodMapper.toEntity(sprintPeriodInfo);
+//    public String updateSprintPeriodInfo(String id, SprintPeriodInfo sprintPeriodInfo){
+//        if(!StringUtils.hasText(id) || !StringUtils.hasText(sprintPeriodInfo.getId()) || !id.equals(sprintPeriodInfo.getId())){
+//            logger.error("Id is null!");
+//            throw new CustomErrorHandler(ExceptionEnum.INVALID_FIELD);
+//        }
+//        SprintPeriod sprintPeriod = sprintPeriodMapper.toEntity(sprintPeriodInfo);
+//
+//        if (!CollectionUtils.isEmpty(sprintPeriodInfo.getIssueTopic())) {
+//            for (String issueTopicId : sprintPeriodInfo.getIssueTopic()) {
+//                Optional<IssueTopic> issueTopicOptional = issueTopicJPARepository.findById(issueTopicId);
+//                if (issueTopicOptional.isPresent()) {
+//                    IssueTopic issueTopic = issueTopicOptional.get();
+//                    issueTopic.setSprintPeriod(sprintPeriod);
+//                }
+//            }
+//        }
+//        logger.info("Sprint Period updated succesfully!");
+//        return sprintPeriodJPARepository.save(sprintPeriod).getId();
+//    }
+        public String updateSprintPeriodInfo(String id, SprintPeriodInfo sprintPeriodInfo) {
+            if (!StringUtils.hasText(id) || !StringUtils.hasText(sprintPeriodInfo.getId()) || !id.equals(sprintPeriodInfo.getId())) {
+                logger.error("Id is null or does not match!");
+                throw new CustomErrorHandler(ExceptionEnum.INVALID_FIELD);
+            }
 
-        if (!CollectionUtils.isEmpty(sprintPeriodInfo.getIssueTopic())) {
-            for (String issueTopicId : sprintPeriodInfo.getIssueTopic()) {
-                Optional<IssueTopic> issueTopicOptional = issueTopicJPARepository.findById(issueTopicId);
-                if (issueTopicOptional.isPresent()) {
-                    IssueTopic issueTopic = issueTopicOptional.get();
-                    issueTopic.setSprintPeriod(sprintPeriod);
+            Optional<SprintPeriod> existingSprintPeriodOpt = sprintPeriodJPARepository.findById(id);
+            if (existingSprintPeriodOpt.isEmpty()) {
+                logger.error("Object Not found!");
+                throw new CustomErrorHandler(ExceptionEnum.OBJECT_NOT_FOUND);
+            }
+            SprintPeriod existingSprintPeriod = existingSprintPeriodOpt.get();
+
+            existingSprintPeriod.setTitle(sprintPeriodInfo.getTitle());
+            existingSprintPeriod.setStartDate(sprintPeriodInfo.getStartDate());
+            existingSprintPeriod.setEndingDate(sprintPeriodInfo.getEndingDate());
+            existingSprintPeriod.setEndedStatus(sprintPeriodInfo.getEndedStatus());
+
+            if (!CollectionUtils.isEmpty(sprintPeriodInfo.getIssueTopic())) {
+                existingSprintPeriod.setIssueTopics(new HashSet<>());
+                for (String issueTopicId : sprintPeriodInfo.getIssueTopic()) {
+                    Optional<IssueTopic> issueTopicOptional = issueTopicJPARepository.findById(issueTopicId);
+                    if (issueTopicOptional.isPresent()) {
+                        IssueTopic issueTopic = issueTopicOptional.get();
+                        issueTopic.setSprintPeriod(existingSprintPeriod);
+                        existingSprintPeriod.getIssueTopics().add(issueTopic);
+                    }
                 }
             }
+
+            SprintPeriod updatedSprintPeriod = sprintPeriodJPARepository.save(existingSprintPeriod);
+
+            logger.info("Sprint Period updated successfully!");
+            return updatedSprintPeriod.getId();
         }
-        logger.info("Sprint Period updated succesfully!");
-        return sprintPeriodJPARepository.save(sprintPeriod).getId();
-    }
+
 }

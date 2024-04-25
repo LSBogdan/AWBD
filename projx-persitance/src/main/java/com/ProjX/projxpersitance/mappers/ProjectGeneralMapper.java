@@ -13,7 +13,7 @@ import org.mapstruct.Mapping;
 )
 public interface ProjectGeneralMapper {
 
-    @Mapping(target = "sprints", source = "sprintPeriods")
+//    @Mapping(target = "sprints", source = "sprintPeriods")
     ProjectGeneralCreationInfo toDto(ProjectGeneral projectGeneral);
 
     ProjectGeneral toEntity(ProjectGeneralCreationInfo projectGeneralCreationInfo);

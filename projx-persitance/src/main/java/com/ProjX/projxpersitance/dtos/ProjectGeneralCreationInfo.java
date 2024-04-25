@@ -17,6 +17,6 @@ public class ProjectGeneralCreationInfo {
 
     private String id;
     private String projectName;
-    Set<SprintPeriodInfo> sprints= new HashSet<>();
+    Set<String> sprints= new HashSet<>();
 
 }

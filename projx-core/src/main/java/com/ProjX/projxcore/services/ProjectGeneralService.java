@@ -26,6 +26,7 @@ import org.springframework.util.StringUtils;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -91,11 +92,24 @@ public class ProjectGeneralService {
             logger.error("Id is null!");
             throw new CustomErrorHandler(ExceptionEnum.OBJECT_NOT_FOUND);
         }
-        ProjectGeneral projectGeneral = projectGeneralMapper.toEntity(projectGeneralCreationInfo);
-        Set<SprintPeriod> sprintPeriods = new HashSet<>();
-        projectGeneralCreationInfo.getSprints().forEach(x-> sprintPeriods.add(sprintPeriodJPARepository.findById(x.getId()).orElseThrow(()->new CustomErrorHandler(ExceptionEnum.OBJECT_NOT_FOUND))));
-        projectGeneral.setSprintPeriods(sprintPeriods);
-        return projectGeneralMapper.toDto(projectGeneralJPARepository.save(projectGeneral));
+        Optional<ProjectGeneral> projectGeneral = projectGeneralJPARepository.findById(id);
+        if(projectGeneral.isEmpty()){
+            logger.error("Project not Found!");
+            throw new CustomErrorHandler(ExceptionEnum.OBJECT_NOT_FOUND);
+        }
+        ProjectGeneral projectGeneralGet = projectGeneral.get();
+        projectGeneralGet.setProjectName(projectGeneralCreationInfo.getProjectName());
+        Set<SprintPeriod> sprintPeriods = projectGeneralGet.getSprintPeriods();
+        Set<SprintPeriod> sprintPeriodSet = projectGeneralCreationInfo.getSprints().stream().map(x->sprintPeriodJPARepository.findById(x).orElseThrow(()->new CustomErrorHandler(ExceptionEnum.OBJECT_NOT_FOUND))).collect(Collectors.toSet());
+        sprintPeriods.addAll(sprintPeriodSet);
+        projectGeneralGet.setSprintPeriods(sprintPeriods);
+        sprintPeriodSet.forEach(x->{x.setProjectGeneral(projectGeneralGet);sprintPeriodJPARepository.save(x);});
+        ProjectGeneral savedProjectGeneral = projectGeneralJPARepository.save(projectGeneral.get());
+        ProjectGeneralCreationInfo projectGeneralCreationInfo1 = new ProjectGeneralCreationInfo();
+        projectGeneralCreationInfo1.setId(savedProjectGeneral.getId());
+        projectGeneralCreationInfo1.setProjectName(savedProjectGeneral.getProjectName());
+        projectGeneralCreationInfo1.setSprints(savedProjectGeneral.getSprintPeriods().stream().map(x->x.getId()).collect(Collectors.toSet()));
+        return projectGeneralCreationInfo1;
     }
 
     @Transactional
