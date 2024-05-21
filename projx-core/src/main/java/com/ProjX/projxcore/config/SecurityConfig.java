@@ -38,6 +38,7 @@ public class SecurityConfig {
                                 .permitAll()
                                 .requestMatchers("/swagger-ui.html","/swagger-ui/**").permitAll()
                                 .requestMatchers("/api/v1/**").hasAnyAuthority("ADMIN", "USER")
+                                .requestMatchers("/adminMake/**").hasAnyAuthority("ADMIN")
                                 .anyRequest()
                                 .authenticated()
                 ).userDetailsService(userDetailsServiceImp)

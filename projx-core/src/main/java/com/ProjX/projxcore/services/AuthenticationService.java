@@ -3,6 +3,9 @@ package com.ProjX.projxcore.services;
 import com.ProjX.projxpersitance.dtos.AuthenticationResponse;
 import com.ProjX.projxpersitance.entitys.Token;
 import com.ProjX.projxpersitance.entitys.User;
+import com.ProjX.projxpersitance.enums.RoleEnum;
+import com.ProjX.projxpersitance.exceptions.CustomErrorHandler;
+import com.ProjX.projxpersitance.exceptions.ExceptionEnum;
 import com.ProjX.projxpersitance.repository.TokenRepository;
 import com.ProjX.projxpersitance.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +55,22 @@ public class AuthenticationService {
 
         return new AuthenticationResponse(jwt, "User registration was successful");
 
+    }
+
+    public String adminMake(String id) {
+
+        if (repository.findById(id).isEmpty()) {
+            throw new CustomErrorHandler(ExceptionEnum.OBJECT_NOT_FOUND);
+        }
+
+        Optional<User> user = repository.findById(id);
+
+        User savedUser = user.get();
+        savedUser.setRole(RoleEnum.ADMIN);
+
+        repository.save(savedUser);
+
+        return "Success";
     }
 
     public AuthenticationResponse authenticate(User request) {
