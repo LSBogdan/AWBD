@@ -6,6 +6,7 @@ import com.ProjX.projxpersitance.dtos.IssueTopicChangeInfo;
 import com.ProjX.projxpersitance.dtos.IssueTopicCreation;
 import com.ProjX.projxpersitance.dtos.IssueTopicInfo;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -19,6 +20,8 @@ import java.util.List;
 @RequestMapping(value = "/api/v1/changes", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 @Slf4j
+@SecurityRequirement(name = "Bearer Authentication")
+
 public class ChangesResource {
 
     private IssueTopicChangesService issueTopicChangesService;

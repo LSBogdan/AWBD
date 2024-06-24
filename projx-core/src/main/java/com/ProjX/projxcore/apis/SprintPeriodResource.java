@@ -5,6 +5,7 @@ import com.ProjX.projxpersitance.dtos.IssueTopicCreation;
 import com.ProjX.projxpersitance.dtos.IssueTopicInfo;
 import com.ProjX.projxpersitance.dtos.SprintPeriodCreation;
 import com.ProjX.projxpersitance.dtos.SprintPeriodInfo;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.http11.filters.VoidInputFilter;
@@ -20,6 +21,8 @@ import java.net.URI;
 @RequestMapping(value = "/api/v1/sprintPeriod", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 @Slf4j
+@SecurityRequirement(name = "Bearer Authentication")
+
 public class SprintPeriodResource {
 
     private SprintPeriodService sprintPeriodService;

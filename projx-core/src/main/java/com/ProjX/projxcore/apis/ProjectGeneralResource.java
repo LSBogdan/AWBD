@@ -5,6 +5,7 @@ import com.ProjX.projxpersitance.dtos.AddUserToProject;
 import com.ProjX.projxpersitance.dtos.ProjectGeneralCreationInfo;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import java.net.URISyntaxException;
 @RequestMapping(value = "/api/v1/projectGeneral", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 @Slf4j
+@SecurityRequirement(name = "Bearer Authentication")
 public class ProjectGeneralResource {
 
     private ProjectGeneralService projectGeneralService;

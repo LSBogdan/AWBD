@@ -4,6 +4,7 @@ import com.ProjX.projxcore.services.IssueTopicService;
 import com.ProjX.projxpersitance.dtos.IssueTopicChangeCreation;
 import com.ProjX.projxpersitance.dtos.IssueTopicCreation;
 import com.ProjX.projxpersitance.dtos.IssueTopicInfo;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.annotation.security.DeclareRoles;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,8 @@ import java.net.URI;
 @RequestMapping(value = "/api/v1/issueTopic", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 @Slf4j
+@SecurityRequirement(name = "Bearer Authentication")
+
 public class IssueTopicResource {
 
 
