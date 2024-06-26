@@ -52,9 +52,11 @@ public class ProjectGeneralResource {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ProjectGeneralCreationInfo> updateProjectGeneral(@PathVariable String id, @RequestBody ProjectGeneralCreationInfo projectGeneralCreationInfo) {
+    public EntityModel<ProjectGeneralCreationInfo> updateProjectGeneral(@PathVariable String id, @RequestBody ProjectGeneralCreationInfo projectGeneralCreationInfo) {
         ProjectGeneralCreationInfo updatedInfo = projectGeneralService.updateProjectGeneral(id, projectGeneralCreationInfo);
-        return ResponseEntity.ok(updatedInfo);
+        EntityModel<ProjectGeneralCreationInfo> response =  EntityModel.of(updatedInfo);
+        response.add(Link.of("/update/" + id).withSelfRel());
+        return response;
     }
 
     @DeleteMapping("/delete/{id}")
@@ -64,9 +66,10 @@ public class ProjectGeneralResource {
     }
 
     @PatchMapping("/addUser")
-    public ResponseEntity<Void> addUserToProject(@RequestBody AddUserToProject addUserToProject){
+    public EntityModel<Void> addUserToProject(@RequestBody AddUserToProject addUserToProject){
         projectGeneralService.addUserToProject(addUserToProject);
-        return ResponseEntity.ok().body(null);
+        EntityModel<Void> response =  EntityModel.of(null);
+        return response;
     }
 }
 

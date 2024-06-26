@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,10 +33,13 @@ public class IssueTopicResource {
 
 
     @PostMapping("")
-    public ResponseEntity<IssueTopicInfo> createIssueTopic(@RequestBody IssueTopicCreation issueTopicCreation) throws Exception{
+    public EntityModel<IssueTopicInfo> createIssueTopic(@RequestBody IssueTopicCreation issueTopicCreation) throws Exception{
 
         String id= issueTopicService.createIssueTopic(issueTopicCreation);
-        return ResponseEntity.created(new URI(id)).body(issueTopicService.getIssueTopicInfo(id));
+        EntityModel<IssueTopicInfo> response = EntityModel.of(issueTopicService.getIssueTopicInfo(id));
+        response.add(Link.of("/getById/"+id));
+        response.add(Link.of("/getAll/"));
+        return response;
     }
 
 
