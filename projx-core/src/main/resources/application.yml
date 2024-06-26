@@ -26,6 +26,10 @@ spring:
           uri: https://github.com/LSBogdan/Spring-Cloud-Server-Config/
           username: LSBogdan
           password: test
+    loadbalancer:
+      retry:
+        enabled: true
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
