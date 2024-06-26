@@ -36,6 +36,11 @@
                 <artifactId>projx-persitance</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.ProjX</groupId>
+                <artifactId>projx-eureka</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>

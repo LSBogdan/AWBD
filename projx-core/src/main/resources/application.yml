@@ -19,9 +19,24 @@ spring:
         show_sql: true
         hbm2ddl:
           auto: update
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/LSBogdan/Spring-Cloud-Server-Config/
+          username: LSBogdan
+          password: test
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    appname: projx-core
 
 
 
