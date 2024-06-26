@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,9 +34,11 @@ public class ProjectGeneralResource {
     }
 
     @GetMapping("/getById/{id}")
-    public ResponseEntity<ProjectGeneralCreationInfo> getProjectGeneralInfoById(@PathVariable String id) {
+    public EntityModel<ProjectGeneralCreationInfo> getProjectGeneralInfoById(@PathVariable String id) {
         ProjectGeneralCreationInfo projectGeneralCreationInfo = projectGeneralService.getProjectGeneralInfoById(id);
-        return ResponseEntity.ok(projectGeneralCreationInfo);
+        EntityModel<ProjectGeneralCreationInfo> response =  EntityModel.of(projectGeneralCreationInfo);
+        response.add(Link.of("/getById/" + id).withSelfRel());
+        return response;
     }
 
     @GetMapping("/getAll")
