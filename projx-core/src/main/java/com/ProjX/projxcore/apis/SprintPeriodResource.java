@@ -13,7 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 
 import java.net.URI;
 
@@ -29,17 +30,24 @@ public class SprintPeriodResource {
 
 
     @PostMapping("")
-    public ResponseEntity<SprintPeriodInfo> createSprintPeriod(@RequestBody SprintPeriodCreation sprintPeriodCreation) throws Exception{
+    public EntityModel<SprintPeriodInfo> createSprintPeriod(@RequestBody SprintPeriodCreation sprintPeriodCreation) throws Exception{
+
         String id= sprintPeriodService.createSprintPeriod(sprintPeriodCreation);
-        log.info("Created Sprint Period ID: " + id);
-        return ResponseEntity.created(new URI(id)).body(sprintPeriodService.getSprintPeriodById(id));
+        EntityModel<SprintPeriodInfo> response = EntityModel.of(sprintPeriodService.getSprintPeriodById(id));
+        response.add(Link.of("/getById/"+id));
+        response.add(Link.of("/getAll"));
+        return response;
     }
 
 
     @GetMapping("/getById/{id}")
-    public ResponseEntity<SprintPeriodInfo> getSprintPeriodInfo(@PathVariable("id") String id){
-        return ResponseEntity.ok()
-                .body(sprintPeriodService.getSprintPeriodById(id));
+    public EntityModel<SprintPeriodInfo> getSprintPeriodInfo(@PathVariable("id") String id){
+
+        SprintPeriodInfo sprintPeriodInfo = sprintPeriodService.getSprintPeriodById(id);
+        EntityModel<SprintPeriodInfo> response = EntityModel.of(sprintPeriodInfo);
+        response.add(Link.of("/getById/" + id).withSelfRel());
+        return response;
+
     }
 
     @GetMapping("/getAll")
