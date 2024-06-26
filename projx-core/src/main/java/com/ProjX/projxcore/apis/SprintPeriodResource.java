@@ -31,6 +31,7 @@ public class SprintPeriodResource {
     @PostMapping("")
     public ResponseEntity<SprintPeriodInfo> createSprintPeriod(@RequestBody SprintPeriodCreation sprintPeriodCreation) throws Exception{
         String id= sprintPeriodService.createSprintPeriod(sprintPeriodCreation);
+        log.info("Created Sprint Period ID: " + id);
         return ResponseEntity.created(new URI(id)).body(sprintPeriodService.getSprintPeriodById(id));
     }
 
