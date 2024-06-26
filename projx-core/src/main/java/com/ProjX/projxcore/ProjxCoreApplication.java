@@ -13,7 +13,7 @@ import java.lang.reflect.InvocationTargetException;
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.ProjX.projxcore", "com.ProjX.projxpersitance"})
 @EntityScan("com.ProjX.projxpersitance.entitys")
-@EnableConfigServer
+//@EnableConfigServer
 public class ProjxCoreApplication {
 
 	public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
